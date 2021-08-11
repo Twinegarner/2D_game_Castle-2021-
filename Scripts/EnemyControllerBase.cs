@@ -23,7 +23,8 @@ public class EnemyControllerBase : MonoBehaviour
     private GameObject player;
     private Rigidbody2D myRigidbody;
     private SpriteRenderer spriteInfo;
-    //private PolygonCollider2D vision;
+    private PlayerStats myPlayerStats;
+    private EnemyStats myEnemyStats;
     private AnimatorStateInfo animInfo;
     private Animator anim;
     private float inputSpeed = 1f;//speed mutiplyer
@@ -42,8 +43,9 @@ public class EnemyControllerBase : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         spriteInfo = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        //vision = GetComponentInChildren<PolygonCollider2D>();
+        myPlayerStats = FindObjectOfType<PlayerStats>();
         player = GameObject.FindGameObjectWithTag("Player");
+        myEnemyStats = GetComponentInChildren<EnemyStats>();
 
         PVTmoveTimer = 0f;
     }
@@ -268,7 +270,8 @@ public class EnemyControllerBase : MonoBehaviour
         //if player enters vision cone then follow and attack
         if(collision.gameObject.tag == "Player")
         {
-            
+            //myPlayerStats.addHealthPoints(-1);
+
             
 
         }
@@ -287,6 +290,18 @@ public class EnemyControllerBase : MonoBehaviour
                 anim.SetBool("Dead", true);
                 deathTrigger = true;
             }
+            else
+            {
+                myRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+                anim.SetTrigger("Hit");
+                myEnemyStats.addEnemyHealthPoints(-(collision.gameObject.GetComponentInChildren<PlayerStats>().getPlayerAttackDamage()));
+                if(myEnemyStats.getEnemyHealthPoints() <= 0)
+                {
+                    anim.SetBool("Dead", true);
+                    deathTrigger = true;
+                }
+            }
+
 
         }
     }

@@ -7,11 +7,17 @@ public class PlayerStats : MonoBehaviour
     public int healthPoints;
     public int healthPointsCap;
     public int moneyPoints;
+    public int playerAttackDamage;
 
-    // Start is called before the first frame update
-    void Start()
+    
+
+    public int getPlayerAttackDamage()
     {
-        
+        return playerAttackDamage;
+    }
+    public void setPlayerAttackDamage(int attack)
+    {
+        playerAttackDamage = attack;
     }
 
     //get and return the number of health point the player currently has
@@ -27,7 +33,9 @@ public class PlayerStats : MonoBehaviour
     //add or subtract healthpoints
     public void addHealthPoints(int health)
     {
+        Debug.Log(health);
         healthPoints += health;
+        Debug.Log(healthPoints);
         //check if below zero if so then change to zero
         if(healthPoints < 0)
         {
@@ -37,6 +45,7 @@ public class PlayerStats : MonoBehaviour
         {
             healthPoints = healthPointsCap;
         }
+        Debug.Log(healthPoints);
     }
     //get and return the amount of money the player has
     public int getMoneyPoints()

@@ -4,17 +4,6 @@ using UnityEngine;
 
 
 
-
-
-
-
-//need to find a locking system
-
-
-
-
-
-
 public class PlayerController : MonoBehaviour
 {
     //public vars
@@ -23,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public bool jumping = false;//used to check if jumping
     public LayerMask groundLayer;//to hold what the raycast is looking at
     public float attackForce = 1f;
+    
  
 
     //private vars
@@ -32,10 +22,11 @@ public class PlayerController : MonoBehaviour
     private AnimatorStateInfo animInfo;
     private BoxCollider2D myAttackBox;
     private CapsuleCollider2D myHitBox;
+    private PlayerStats myPlayerStats;
 
     private float HorizontalMove;
     private float moveingY;
-    private bool isAttacking = false;
+    public bool isAttacking = false;
     private bool lastFace;//true right false left
     
     
@@ -51,7 +42,7 @@ public class PlayerController : MonoBehaviour
         spriteInfo = GetComponent<SpriteRenderer>();
         myHitBox = GetComponent<CapsuleCollider2D>();
         myAttackBox = GetComponentInChildren<BoxCollider2D>();
-       
+        myPlayerStats = GetComponentInChildren<PlayerStats>();
 
     }
 
@@ -66,6 +57,10 @@ public class PlayerController : MonoBehaviour
         {
             HorizontalMove = Input.GetAxisRaw("Horizontal") * moveSpeed;
         }
+
+
+        
+
         //checks the ground if in contact and displays in editor
         IsGrounded();
         //if jump is hit and in contact to the ground
@@ -77,6 +72,7 @@ public class PlayerController : MonoBehaviour
         //the player attack 
         if (Input.GetKeyDown(KeyCode.F) && IsGrounded())
         {
+            
             playerAttack();
         }
 
@@ -92,9 +88,9 @@ public class PlayerController : MonoBehaviour
         //player lock in during attack by grabbing the animator state infomation 
         animInfo = anim.GetCurrentAnimatorStateInfo(0);
         //if first attack stop player and bump forward
-        if((animInfo.IsName("mage_att_1") || animInfo.IsName("mage_att_2")|| animInfo.IsName("mage_att_3")) && animInfo.normalizedTime < .1)
+        if ((animInfo.IsName("mage_att_1") || animInfo.IsName("mage_att_2") || animInfo.IsName("mage_att_3")) && animInfo.normalizedTime < .1)
         {
-            
+
             HorizontalMove = 0;
             //bump forward during attack using impluse
             myRigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -106,13 +102,17 @@ public class PlayerController : MonoBehaviour
             {
                 myRigidbody2D.AddForce(new Vector2(attackForce, myRigidbody2D.velocity.y), ForceMode2D.Impulse);
             }
-            
+
             isAttacking = true;
+        }
+        else if((animInfo.IsName("mage_att_1") || animInfo.IsName("mage_att_2") || animInfo.IsName("mage_att_3")) && animInfo.normalizedTime < 1)
+        {
+            isAttacking = true;
+
         }
         else
         {
             isAttacking = false;
-            
         }
 
 
@@ -216,8 +216,22 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if (collision.gameObject.tag == "enemy")
+        {
+            //play hit take away health and if possible play death
+
+        }
     }
 
-   
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "EnemyAttack")
+        {
+            myPlayerStats.addHealthPoints(-collision.gameObject.GetComponentInChildren<EnemyStats>().getEnemyAttackDamage());
+            //Debug.Log(collision.gameObject.GetComponentInChildren<EnemyStats>().getEnemyAttackDamage());
+
+        }
+    }
+
+
 }
