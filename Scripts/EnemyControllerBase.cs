@@ -62,13 +62,12 @@ public class EnemyControllerBase : MonoBehaviour
         {
             horizontalSpeed = 0;
         }
-        
+       
     }
     //limited frame call
     private void FixedUpdate()
     {
-        //cal that have to go first
-
+        
         //if death then linger then destroy
         if (deathTrigger)
         {
@@ -205,9 +204,6 @@ public class EnemyControllerBase : MonoBehaviour
             }
         }
 
-        //work on attacking the player if close
-        
-            
         
     }
     //flip the enemies direction
@@ -267,14 +263,7 @@ public class EnemyControllerBase : MonoBehaviour
     // the enemy comes in contact with the players attack
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //if player enters vision cone then follow and attack
-        if(collision.gameObject.tag == "Player")
-        {
-            //myPlayerStats.addHealthPoints(-1);
-
-            
-
-        }
+        
         
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -295,7 +284,8 @@ public class EnemyControllerBase : MonoBehaviour
                 myRigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
                 anim.SetTrigger("Hit");
                 myEnemyStats.addEnemyHealthPoints(-(collision.gameObject.GetComponentInChildren<PlayerStats>().getPlayerAttackDamage()));
-                if(myEnemyStats.getEnemyHealthPoints() <= 0)
+                
+                if (myEnemyStats.getEnemyHealthPoints() <= 0)
                 {
                     anim.SetBool("Dead", true);
                     deathTrigger = true;

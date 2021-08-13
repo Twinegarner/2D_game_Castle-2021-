@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
             
             playerAttack();
         }
-
+        
     }
     //called limited times
     private void FixedUpdate()
@@ -228,7 +228,7 @@ public class PlayerController : MonoBehaviour
         if(collision.gameObject.tag == "EnemyAttack")
         {
             myPlayerStats.addHealthPoints(-collision.gameObject.GetComponentInChildren<EnemyStats>().getEnemyAttackDamage());
-            //Debug.Log(collision.gameObject.GetComponentInChildren<EnemyStats>().getEnemyAttackDamage());
+            anim.SetTrigger("Hit");
 
         }
     }

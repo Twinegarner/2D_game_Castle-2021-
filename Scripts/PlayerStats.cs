@@ -33,9 +33,9 @@ public class PlayerStats : MonoBehaviour
     //add or subtract healthpoints
     public void addHealthPoints(int health)
     {
-        Debug.Log(health);
+       
         healthPoints += health;
-        Debug.Log(healthPoints);
+        
         //check if below zero if so then change to zero
         if(healthPoints < 0)
         {
@@ -45,7 +45,7 @@ public class PlayerStats : MonoBehaviour
         {
             healthPoints = healthPointsCap;
         }
-        Debug.Log(healthPoints);
+        
     }
     //get and return the amount of money the player has
     public int getMoneyPoints()
